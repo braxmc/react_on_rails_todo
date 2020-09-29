@@ -4,6 +4,13 @@ import { Form } from 'semantic-ui-react';
 class TodoForm extends Component {
   state = { title: '', complete: false }
 
+  componentDidMount() {
+    if (this.props.id) {
+      const { title, complete } = this.props
+      this.setState({ title, complete })
+    }
+  }
+
   handleChange = (e) => {
     const { name, value } = e.target
     this.setState({ [name]: value })
@@ -11,7 +18,13 @@ class TodoForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.addTodo(this.state)
+    if (this.props.id) {
+      const { id, updateTodo, close } = this.props
+      updateTodo(id, this.state)
+      close()
+    } else {
+      this.props.addTodo(this.state)
+    }
     this.setState({ title: '', complete: false })
   }
 
